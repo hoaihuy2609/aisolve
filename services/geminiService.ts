@@ -152,10 +152,19 @@ const convertFilesToImageParts = async (files: File[]): Promise<ImagePart[]> => 
  * @throws Error if API key is missing or API call fails
  */
 export const solveProblemsFromImages = async (files: File[]): Promise<string> => {
-  // Validate API key - support both process.env and import.meta.env for maximum compatibility
-  const apiKey = (import.meta.env?.VITE_API_KEY) || (process.env?.API_KEY);
+  // Validate API key - support multiple environment variable names for maximum compatibility
+  const apiKey = (import.meta.env?.VITE_API_KEY) ||
+    (import.meta.env?.GEMINI_API_KEY) ||
+    (process.env?.API_KEY) ||
+    (process.env?.GEMINI_API_KEY);
 
   if (!apiKey) {
+    console.warn("API Key detection failed. Environment variables found:", {
+      VITE_API_KEY: !!import.meta.env?.VITE_API_KEY,
+      GEMINI_API_KEY: !!import.meta.env?.GEMINI_API_KEY,
+      PROCESS_API_KEY: !!process.env?.API_KEY,
+      PROCESS_GEMINI_API_KEY: !!process.env?.GEMINI_API_KEY
+    });
     throw new Error(ERROR_MESSAGES.API_KEY_MISSING);
   }
 
