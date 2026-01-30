@@ -152,13 +152,15 @@ const convertFilesToImageParts = async (files: File[]): Promise<ImagePart[]> => 
  * @throws Error if API key is missing or API call fails
  */
 export const solveProblemsFromImages = async (files: File[]): Promise<string> => {
-  // Validate API key
-  if (!process.env.API_KEY) {
+  // Validate API key - support both process.env and import.meta.env for maximum compatibility
+  const apiKey = (import.meta.env?.VITE_API_KEY) || (process.env?.API_KEY);
+
+  if (!apiKey) {
     throw new Error(ERROR_MESSAGES.API_KEY_MISSING);
   }
 
   // Initialize Gemini AI
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey });
 
   try {
     // Convert files to image parts
