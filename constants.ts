@@ -19,7 +19,7 @@ export const ERROR_MESSAGES = {
 } as const;
 
 export const AI_CONFIG = {
-    MODEL: 'gemini-1.5-flash',
+    MODEL: 'gemini-1.5-pro',
     TEMPERATURE: 0.2,
     TOP_P: 0.95,
 } as const;
